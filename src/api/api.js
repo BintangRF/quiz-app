@@ -2,17 +2,9 @@ import axios from "axios";
 
 const API_BASE = "https://opentdb.com";
 
-export async function fetchQuestions(
-  amount = 10,
-  category = "",
-  difficulty = ""
-) {
+export async function fetchQuestions(amount = 10) {
   const params = new URLSearchParams();
   params.append("amount", amount);
-
-  if (category) params.append("category", category);
-  if (difficulty) params.append("difficulty", difficulty);
-
   params.append("type", "multiple");
 
   const url = `${API_BASE}/api.php?${params.toString()}`;
