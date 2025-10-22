@@ -8,7 +8,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [hasSavedQuiz, setHasSavedQuiz] = useState(false);
   const [questionCount, setQuestionCount] = useState(10);
-  const [timeLimit, setTimeLimit] = useState(3);
+  const [timeLimit, setTimeLimit] = useState(300);
 
   const login = useQuizStore((s) => s.login);
   const setQuestions = useQuizStore((s) => s.setQuestions);
@@ -35,14 +35,14 @@ export default function Login() {
     e.preventDefault();
     if (!name.trim()) return alert("Masukkan nama dulu.");
     if (questionCount <= 0) return alert("Masukkan soal minimal 1.");
-    if (timeLimit <= 0) return alert("Masukkan waktu minimal 1 menit.");
+    if (timeLimit <= 0) return alert("Masukkan waktu minimal 5 detik.");
 
     setLoading(true);
     try {
       login(name.trim());
       const qs = await fetchQuestions(questionCount);
       setQuestions(qs);
-      startQuiz({ totalTimeSec: timeLimit * 60 });
+      startQuiz({ totalTimeSec: timeLimit });
       saveToStorage();
       navigate("/quiz");
     } catch (err) {
@@ -93,13 +93,13 @@ export default function Login() {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Batas Waktu (menit)
+            Batas Waktu (detik)
           </label>
           <input
             type="number"
             value={timeLimit}
-            min={1}
-            max={60}
+            min={5}
+            max={300}
             onChange={(e) => setTimeLimit(Number(e.target.value))}
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
